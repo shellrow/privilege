@@ -1,5 +1,4 @@
-use std::error::Error;
-use std::process::Command;
+use crate::user::Privilege;
 
 pub fn get_privilege() -> Privilege {
     let uid = unsafe { libc::getuid() };
