@@ -49,7 +49,7 @@ impl Command {
         self.force_prompt = val;
         self
     }
-    
+
     pub fn run(&mut self) -> io::Result<ExitStatus> {
         runas_root(self)
     }

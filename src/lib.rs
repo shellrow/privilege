@@ -1,7 +1,5 @@
-pub mod user;
 pub mod runas;
+pub mod user;
 
 #[cfg(test)]
-mod tests {
-
-}
+mod tests {}

@@ -1,8 +1,8 @@
 use std::io::Error;
 use windows_sys::Win32::Foundation::{CloseHandle, HANDLE};
-use windows_sys::Win32::System::Threading::{GetCurrentProcess, OpenProcessToken};
 use windows_sys::Win32::Security::GetTokenInformation;
 use windows_sys::Win32::Security::{TokenElevation, TOKEN_ELEVATION, TOKEN_QUERY};
+use windows_sys::Win32::System::Threading::{GetCurrentProcess, OpenProcessToken};
 
 use super::Privilege;
 
