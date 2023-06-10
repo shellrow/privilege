@@ -8,8 +8,9 @@ fn get_shell_name() -> String {
 }
 
 fn main() {
-    println!("Run a root shell:");
-    match Command::new(get_shell_name()).run() {
+    println!("Run a root shell ...");
+    let mut cmd: Command = Command::new(get_shell_name());
+    match cmd.run() {
         Ok(status) => println!("Exit Status: {}", status),
         Err(e) => println!("Failed to execute. {}",e),
     }
