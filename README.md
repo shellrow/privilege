@@ -1,2 +1,2 @@
 # privilege
-Cross-Platform Library for Checking Administrative Permissions
+Cross-platform library for Checking Administrative Permissions
