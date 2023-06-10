@@ -4,7 +4,7 @@ use std::process::ExitStatus;
 
 use crate::Command;
 
-pub fn runas_impl(cmd: &Command) -> io::Result<ExitStatus> {
+pub fn runas_root(cmd: &Command) -> io::Result<ExitStatus> {
     match which::which("sudo") {
         Ok(_) => {
             let mut c = process::Command::new("sudo");

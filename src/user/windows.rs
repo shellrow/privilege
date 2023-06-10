@@ -4,11 +4,17 @@ use windows_sys::Win32::System::Threading::{GetCurrentProcess, OpenProcessToken}
 use windows_sys::Win32::Security::GetTokenInformation;
 use windows_sys::Win32::Security::{TokenElevation, TOKEN_ELEVATION, TOKEN_QUERY};
 
-pub fn privileged() -> bool {
-    _is_elevated().unwrap_or(false)
+use super::Privilege;
+
+pub fn get_privilege() -> Privilege {
+    match is_elevated() {
+        Ok(true) => Privilege::Root,
+        Ok(false) => Privilege::User,
+        Err(_) => Privilege::User,
+    }
 }
 
-fn _is_elevated() -> Result<bool, Error> {
+fn is_elevated() -> Result<bool, Error> {
     let token = QueryAccessToken::from_current_process()?;
     token.is_elevated()
 }

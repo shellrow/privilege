@@ -2,7 +2,7 @@ use std::ffi::{OsStr, OsString};
 use std::io;
 use std::process::ExitStatus;
 
-use crate::runas::runas_impl;
+use crate::runas::runas_root;
 
 pub struct Command {
     pub command: OsString,
@@ -50,7 +50,7 @@ impl Command {
         self
     }
     
-    pub fn status(&mut self) -> io::Result<ExitStatus> {
-        runas_impl(self)
+    pub fn run(&mut self) -> io::Result<ExitStatus> {
+        runas_root(self)
     }
 }

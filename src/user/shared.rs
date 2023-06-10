@@ -5,8 +5,9 @@ pub enum Privilege {
     Suid,
 }
 
-pub struct User {
-    pub uid: u32,
-    pub gid: u32,
-    pub privilege: Privilege,
+pub fn privileged() -> bool {
+    match crate::user::get_privilege() {
+        Privilege::Root | Privilege::Suid => true,
+        Privilege::User => false,
+    }
 }
