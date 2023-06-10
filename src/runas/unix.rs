@@ -4,8 +4,8 @@ use std::process::ExitStatus;
 
 use crate::runas::Command;
 
-pub fn runas_root(cmd: &Command) -> io::Result<ExitStatus> {
-    match which::which("sudo") {
+pub(crate) fn runas_root_sudo(cmd: &Command) -> io::Result<ExitStatus> {
+    match which::which(crate::runas::CMD_SUDO) {
         Ok(_) => {
             let mut c = process::Command::new("sudo");
             if cmd.force_prompt {
@@ -15,7 +15,12 @@ pub fn runas_root(cmd: &Command) -> io::Result<ExitStatus> {
         }
         Err(_) => Err(io::Error::new(
             io::ErrorKind::NotFound,
-            "Command `sudo` not found",
+            format!("Command `{}` not found", crate::runas::CMD_SUDO),
         )),
     }
+}
+
+#[cfg(all(unix, not(target_os = "macos")))]
+pub(crate) fn runas_root(cmd: &Command) -> io::Result<ExitStatus> {
+    runas_root_sudo(cmd)
 }

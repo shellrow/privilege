@@ -13,10 +13,9 @@ use security_framework_sys::authorization::{
     AuthorizationCreate, AuthorizationExecuteWithPrivileges, AuthorizationFree, AuthorizationRef,
 };
 
-use crate::impl_unix::runas_impl as runas_sudo_impl;
-use crate::Command;
+use crate::runas::Command;
 
-fn find_exe<P: AsRef<Path>>(exe_name: P) -> Option<PathBuf> {
+fn get_exe_path<P: AsRef<Path>>(exe_name: P) -> Option<PathBuf> {
     let exe_name = exe_name.as_ref().as_os_str();
     if let Some(exe) = exe_name.to_str() {
         if exe.starts_with('/') || exe.starts_with("./") {
@@ -24,7 +23,7 @@ fn find_exe<P: AsRef<Path>>(exe_name: P) -> Option<PathBuf> {
         }
     }
 
-    env::var_os("PATH").and_then(|paths| {
+    env::var_os(crate::runas::ENV_PATH).and_then(|paths| {
         env::split_paths(&paths)
             .filter_map(|dir| {
                 let full_path = dir.join(exe_name);
@@ -89,8 +88,8 @@ unsafe fn gui_runas(prog: *const i8, argv: *const *const i8) -> i32 {
     status
 }
 
-fn runas_gui_impl(cmd: &Command) -> io::Result<ExitStatus> {
-    let exe: OsString = match find_exe(&cmd.command) {
+fn runas_root_gui(cmd: &Command) -> io::Result<ExitStatus> {
+    let exe: OsString = match get_exe_path(&cmd.command) {
         Some(exe) => exe.into(),
         None => unsafe {
             return Ok(mem::transmute(!0));
@@ -107,10 +106,10 @@ fn runas_gui_impl(cmd: &Command) -> io::Result<ExitStatus> {
     unsafe { Ok(mem::transmute(gui_runas(prog.as_ptr(), argv.as_ptr()))) }
 }
 
-pub fn runas_impl(cmd: &Command) -> io::Result<ExitStatus> {
+pub fn runas_root(cmd: &Command) -> io::Result<ExitStatus> {
     if cmd.gui {
-        runas_gui_impl(cmd)
+        runas_root_gui(cmd)
     } else {
-        runas_sudo_impl(cmd)
+        crate::runas::runas_root_sudo(cmd)
     }
 }

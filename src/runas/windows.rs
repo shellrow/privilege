@@ -45,7 +45,7 @@ unsafe fn win_runas(cmd: *const c_ushort, args: *const c_ushort, show: bool) -> 
     }
 }
 
-pub fn runas_root(cmd: &Command) -> io::Result<ExitStatus> {
+pub(crate) fn runas_root(cmd: &Command) -> io::Result<ExitStatus> {
     let mut params = String::new();
     for arg in cmd.args.iter() {
         let arg = arg.to_string_lossy();

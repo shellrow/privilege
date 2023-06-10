@@ -1,12 +1,17 @@
-pub mod shared;
+mod shared;
 pub use self::shared::*;
 
 #[cfg(not(target_os = "windows"))]
-pub mod unix;
+mod unix;
 #[cfg(not(target_os = "windows"))]
-pub use self::unix::*;
+pub(crate) use self::unix::*;
+
+#[cfg(any(target_os = "macos", target_os = "ios"))]
+mod macos;
+#[cfg(any(target_os = "macos", target_os = "ios"))]
+pub(crate) use self::macos::*;
 
 #[cfg(target_os = "windows")]
-pub mod windows;
+mod windows;
 #[cfg(target_os = "windows")]
-pub use self::windows::*;
+pub(crate) use self::windows::*;
