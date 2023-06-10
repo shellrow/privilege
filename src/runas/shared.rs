@@ -4,9 +4,6 @@ use std::process::ExitStatus;
 
 use crate::runas::runas_root;
 
-pub(crate) const ENV_PATH: &str = "PATH";
-pub(crate) const CMD_SUDO: &str = "sudo";
-
 /// Represents a command that can be executed with administrative privileges.
 pub struct Command {
     pub(crate) command: OsString,

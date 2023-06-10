@@ -4,6 +4,9 @@ use std::process::ExitStatus;
 
 use crate::runas::Command;
 
+pub(crate) const ENV_PATH: &str = "PATH";
+pub(crate) const CMD_SUDO: &str = "sudo";
+
 pub(crate) fn runas_root_sudo(cmd: &Command) -> io::Result<ExitStatus> {
     match which::which(crate::runas::CMD_SUDO) {
         Ok(_) => {
