@@ -39,8 +39,8 @@ impl Command {
         self
     }
     /// Determines visibility of the program.
-    pub fn show(&mut self, val: bool) -> &mut Command {
-        self.hide = !val;
+    pub fn hide(&mut self, val: bool) -> &mut Command {
+        self.hide = val;
         self
     }
     /// Determines whether the command is run with GUI elevation prompt.
