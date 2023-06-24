@@ -10,7 +10,7 @@ pub(crate) const CMD_SUDO: &str = "sudo";
 pub(crate) fn runas_root_sudo(cmd: &Command) -> io::Result<ExitStatus> {
     match which::which(crate::runas::CMD_SUDO) {
         Ok(_) => {
-            let mut c = process::Command::new("sudo");
+            let mut c = process::Command::new(CMD_SUDO);
             if cmd.force_prompt {
                 c.arg("-k");
             }
@@ -18,7 +18,7 @@ pub(crate) fn runas_root_sudo(cmd: &Command) -> io::Result<ExitStatus> {
         }
         Err(_) => Err(io::Error::new(
             io::ErrorKind::NotFound,
-            format!("Command `{}` not found", crate::runas::CMD_SUDO),
+            format!("Command `{}` not found", CMD_SUDO),
         )),
     }
 }
