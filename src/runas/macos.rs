@@ -16,11 +16,9 @@ use security_framework_sys::authorization::{
 use crate::runas::Command;
 
 fn get_exe_path<P: AsRef<Path>>(exe_name: P) -> Option<PathBuf> {
-    let exe_name = exe_name.as_ref().as_os_str();
-    if let Some(exe) = exe_name.to_str() {
-        if exe.starts_with('/') || exe.starts_with("./") {
-            return Some(PathBuf::from(exe_name));
-        }
+    let exe_name = exe_name.as_ref();
+    if exe_name.has_root() {
+        return Some(exe_name.into());
     }
 
     env::var_os(crate::runas::ENV_PATH).and_then(|paths| {
