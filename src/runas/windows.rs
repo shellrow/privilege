@@ -13,6 +13,8 @@ use windows_sys::Win32::System::Threading::GetExitCodeProcess;
 use windows_sys::Win32::System::Threading::WaitForSingleObject;
 use windows_sys::Win32::System::Threading::INFINITE;
 use windows_sys::Win32::UI::Shell::{ShellExecuteExW, SHELLEXECUTEINFOW};
+use windows_sys::Win32::UI::Shell::SEE_MASK_NOASYNC;
+use windows_sys::Win32::UI::Shell::SEE_MASK_NOCLOSEPROCESS;
 use windows_sys::Win32::UI::WindowsAndMessaging::{SW_HIDE, SW_NORMAL};
 
 use crate::runas::Command;
@@ -25,11 +27,12 @@ unsafe fn win_runas(cmd: *const c_ushort, args: *const c_ushort, show: bool) -> 
         ptr::null(),
         COINIT_APARTMENTTHREADED | COINIT_DISABLE_OLE1DDE,
     );
-
+    
     sei.cbSize = mem::size_of::<SHELLEXECUTEINFOW>() as _;
     sei.lpVerb = verb.as_ptr();
     sei.lpFile = cmd;
     sei.lpParameters = args;
+    sei.fMask = SEE_MASK_NOASYNC | SEE_MASK_NOCLOSEPROCESS;
     sei.nShow = if show { SW_NORMAL } else { SW_HIDE } as _;
 
     if ShellExecuteExW(&mut sei) == 0 || sei.hProcess == 0 {
