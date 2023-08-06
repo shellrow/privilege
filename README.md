@@ -18,7 +18,7 @@ Cross-platform library for administrative permission handling.
 Add `privilege` to your dependencies  
 ```toml:Cargo.toml
 [dependencies]
-privilege = "0.2.0"
+privilege = "0.3"
 ```
 
 For more details, see [examples][examples-url] or doc.  
